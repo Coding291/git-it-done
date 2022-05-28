@@ -14,17 +14,13 @@ var getUserRepos = function(user) {
         alert("Error: GitHub User Not Found");
       }
       })
-    // response.json().then(function(data) {
-    // displayRepos(data, user);
-    // console.log(data);
-    // });
     .catch(function(error) {
         // Notice this `.catch()` getting chained onto the end of the `.then()` method
+        console.log(error);
         alert("Unable to connect to GitHub");
       });
  };
-  console.log("outside");
-  getUserRepos();
+  
 
   var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -39,19 +35,23 @@ if (username) {
     console.log(event);
   };
 
-  userFormEl.addEventListener("submit", formSubmitHandler);
+
 
   var displayRepos = function(repos, searchTerm) {
     if (repos.length === 0) {
         repoContainerEl.textContent = "No repositories found.";
         return;
       }
-    repoContainerEl.textContent = "";
+  
     repoSearchTerm.textContent = searchTerm;
 
     for (var i = 0; i < repos.length; i++) {
         // format repo name
         var repoName = repos[i].owner.login + "/" + repos[i].name;
+
+        var repoEl = document.createElement("a");
+        repoEl.classList = "list-item flex-row justify-space-between align-center";
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
       
         // create a container for each repo
         var repoEl = document.createElement("div");
@@ -74,7 +74,7 @@ if (username) {
          } else {
         statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
       }
-      
+        repoEl.appendChild(statusEl);
         // append container to the dom
         repoContainerEl.appendChild(repoEl);
       }
@@ -83,4 +83,4 @@ if (username) {
     console.log(searchTerm);
   };
   
-  
+  userFormEl.addEventListener("submit", formSubmitHandler);
